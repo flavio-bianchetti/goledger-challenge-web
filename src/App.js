@@ -4,7 +4,7 @@ import Cars from './pages/Cars';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={ <Cars /> } />
+      <Route path="/cars" element={ <Cars /> } />
     </Routes>
   );
 }
