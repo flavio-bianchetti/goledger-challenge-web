@@ -5,41 +5,80 @@ import Table from '../components/Table';
 const Cars = () => {
   const [listCars, setListCars] = useState([]);
 
-  useEffect(() => {
-    const data = {
-      "query": {
-        "selector": {
-          "@assetType": "car"
-        }
+  const queryCar = () => ({
+    "query": {
+      "selector": {
+        "@assetType": "car"
       }
-    };
-    queryData('search', data)
-      .then((results) => {
-        const data = results.map((elem) => {
-          return {
+    }
+  });
+
+  const queryDriver = (keyDriver) => ({
+    "query": {
+      "selector": {
+        "@assetType": "driver",
+        "@key": keyDriver,
+      }
+    }
+  });
+
+  const queryTeam = (keyTeam) => ({
+    "query": {
+      "selector": {
+        "@assetType": "team",
+        "@key": keyTeam,
+      }
+    }
+  });
+
+  useEffect(() => {
+    queryData('search', queryCar())
+      .then((resultsCar) => {
+        const dataCar = resultsCar.map((elem) => {
+          const result = {
             '@key': elem['@key'],
-            '@lastTouchBy': elem['@lastTouchBy'],
-            '@lastTx': elem['@lastTx'],
-            'driver.@key': elem.driver['@key'],
-            '@id': elem['id'],
+            'id': elem['id'],
             'model': elem['model'],
+            'driver': '',
+            'team': ' - ',
           };
+
+          if (elem.driver["@key"].split(':')[0] === 'car') {
+            result['driver'] = elem['model'];
+          } else {
+          queryData('search', queryDriver(elem.driver['@key']))
+            .then((resultsDriver) =>{
+              result['driver'] = resultsDriver[0].name;
+              queryData('search', queryTeam(resultsDriver[0].team['@key']))
+                .then((resultsTeam) => {
+                  result['team'] = resultsTeam[0].name;
+                }).catch((error) => {
+                  console.error(error);
+                  result['team'] = 'Not found'; 
+                });
+            }).catch((error) => {
+              console.error(error);
+              result['driver'] = 'Not found';
+              result['team'] = 'Not found';
+            });
+          }
+          return result;
+
         });
-        setListCars(data);
+        setListCars(dataCar);
       }).catch((error) => {
         console.error(error);
         setListCars([]);
       });
   }, []);
 
-  const header = [
+  const headers = [
     '@Key',
-    '@lastTouchBy',
-    '@lastTx',
-    'driver.@key',
     'id',
     'model',
-    'ação',
+    'driver',
+    'team',
+    'ações',
   ];
 
   const handleClickEdit = () => true;
@@ -48,31 +87,14 @@ const Cars = () => {
 
   return (
     <section>
-      {/* <div>Lista de Carros</div>
-      {
-        listCars.map((car, index) => (
-          <div
-            key={ index }
-          >
-            <p>@key: <span>{ car['@key'] }</span> </p>
-            <p>@lastTouchBy: <span>{ car['@lastTouchBy'] }</span> </p>
-            <p>@lastTx: <span>{ car['@lastTx'] }</span> </p>
-            <p>driver.@key: <span>{ car.driver['@key'] }</span> </p>
-            <p>@id: <span>{ car['id'] }</span> </p>
-            <p>model: <span>{ car['model'] }</span> </p>
-          </div>
-        ))
-      } */}
-      {
-        Table({
-          'title': 'Lista de Carros',
-          'header': header,
-          'data': listCars,
-          'handleClickEdit': handleClickEdit,
-          'handleClickDelete': handleClickDelete,
-          'isIconsDisabled': false,
-        })
-      }
+      <Table
+        title={ 'Lista de Carros' }
+        header={ headers }
+        data={ listCars }
+        handleClickEdit={ handleClickEdit }
+        handleClickDelete={ handleClickDelete }
+        isIconsDisabled={ false }
+      />
     </section>
   )
 }
