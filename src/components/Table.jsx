@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Box, Typography, Table, TableBody, TableHead, TableRow, styled,
-  IconButton,
+  IconButton, Stack,
 } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,10 +21,10 @@ function TableElement({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: 'green',
       color: theme.palette.common.white,
-      fontSize: 16,
+      fontSize: 14,
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
+      fontSize: 6,
     },
   }));
 
@@ -73,12 +73,12 @@ function TableElement({
           {
             data.map((elem, index) => {
               const values = Object.values(elem);
-              console.log('---->', values);
               return (
                 <StyledTableRow key={ index }>
                   {
                     values.map((value, key) => 
                       <TableCell
+                        style={ { fontSize: '12px' } }
                         key={ key }
                         align="center"
                       >
@@ -89,24 +89,29 @@ function TableElement({
                   <TableCell
                     align="center"
                   >
-                    <IconButton
-                      color="warning"
-                      aria-label="edit"
-                      name={ elem['$id'] }
-                      onClick={ (e) => handleClickEdit(e) }
-                      disabled={ isIconsDisabled }
+                    <Stack
+                      direction="row"
+                      spacing={ 1 }
                     >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      aria-label="delete"
-                      name={ elem['$id'] }
-                      onClick={ (e) => handleClickDelete(e) }
-                      disabled={ isIconsDisabled }
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                      <IconButton
+                        color="warning"
+                        aria-label="edit"
+                        name={ elem['$id'] }
+                        onClick={ (e) => handleClickEdit(e) }
+                        disabled={ isIconsDisabled }
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        aria-label="delete"
+                        name={ elem['$id'] }
+                        onClick={ (e) => handleClickDelete(e) }
+                        disabled={ isIconsDisabled }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Stack>
                   </TableCell>
                 </StyledTableRow>
               );
