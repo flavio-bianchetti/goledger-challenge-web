@@ -257,6 +257,49 @@ const RacesProvider = ({ children }) => {
       });
   }
 
+  const handleChangeCar = () => {
+    queryData('search', queryFindCar(Number(carId)))
+      .then((resultsCar) => {
+        const currentCar = {
+          idCar: Number(carId),
+          model: carModel,
+          idDriver: Number(carDriver),
+        };
+        invokeData('updateAsset', queryPutCar(currentCar))
+          .then((resultNewCar) => {
+            setConfigMessage({
+              backgroundColor: 'warning',
+              severity: 'success',
+              message: 'Veículo alterado com sucesso!',
+            });
+            setIsShowMessage(true);
+            setCarId('');
+            setCarModel('');
+            setCarDriver('');
+            updateCarList();
+            setIsEditCar(false);
+            setIsIconsDisabled(false);
+
+          }).catch((error) => {
+            console.error(error);
+            setConfigMessage({
+              backgroundColor: 'red',
+              severity: 'error',
+              message: 'Erro durante a alteração do veículo.',
+            });
+            setIsShowMessage(true);
+          })
+      }).catch((error) => {
+        console.error(error);
+        setConfigMessage({
+          backgroundColor: 'red',
+          severity: 'error',
+          message: 'Erro durante a pesquisa dos veículos.',
+        });
+        setIsShowMessage(true);
+      });
+  }
+
   const listRacesProvider = {
     listCars,
     setListCars,
