@@ -218,6 +218,45 @@ const RacesProvider = ({ children }) => {
   const updateCarList = () => {
     setUpdateData(true);
   }
+
+  const editCarRegister = (id) => {
+    queryData('search', queryFindCar(Number(id)))
+      .then((resultsCar) => {
+        queryData('search', queryDriver(
+          resultsCar[0].driver['@assetType'],
+          resultsCar[0].driver['@key']
+        ))
+        .then((resultsDriver) => {
+          setCarId(resultsCar[0].id);
+          setCarModel(resultsCar[0].model);
+          if (resultsDriver.length) {
+            setCarDriver(resultsDriver[0]['id']);
+          } else {
+            setCarDriver(0);
+          }
+          setIsEditCar(true);
+          setIsIconsDisabled(true);
+        }).catch((error) => {
+          console.error(error);
+          setConfigMessage({
+            backgroundColor: 'red',
+            severity: 'error',
+            message: 'Erro durante a busca do veículo.',
+          });
+          setIsShowMessage(true);
+        })
+
+      }).catch((error) => {
+        console.error(error);
+        setConfigMessage({
+          backgroundColor: 'red',
+          severity: 'error',
+          message: 'Erro durante a pesquisa dos veículos.',
+        });
+        setIsShowMessage(true);
+      });
+  }
+
   const listRacesProvider = {
     listCars,
     setListCars,
