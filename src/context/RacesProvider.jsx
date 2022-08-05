@@ -300,6 +300,39 @@ const RacesProvider = ({ children }) => {
       });
   }
 
+  const deleteCarRegister = (id) => {
+    queryData('search', queryFindCar(Number(id)))
+      .then((resultsCar) => {
+        invokeData('deleteAsset', queryDelete('car', Number(id)))
+          .then((resultCar) => {
+            setConfigMessage({
+              backgroundColor: 'green',
+              severity: 'success',
+              message: 'Veículo excluído com sucesso!',
+            });
+            setIsShowMessage(true);
+            setUpdateData(true);
+
+          }).catch((error) => {
+            console.error(error);
+            setConfigMessage({
+              backgroundColor: 'red',
+              severity: 'error',
+              message: 'Erro durante a exclusão do registro.',
+            });
+            setIsShowMessage(true);
+          })
+      }).catch((error) => {
+        console.error(error);
+        setConfigMessage({
+          backgroundColor: 'red',
+          severity: 'error',
+          message: 'Erro durante a pesquisa do veículo.',
+        });
+        setIsShowMessage(true);
+      });
+  }
+
   const listRacesProvider = {
     listCars,
     setListCars,
