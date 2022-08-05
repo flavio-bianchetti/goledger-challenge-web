@@ -165,6 +165,56 @@ const RacesProvider = ({ children }) => {
     }
   }, [isShowMessage]);
 
+  const handleSubmitCar = () => {
+    queryData('search', queryFindCar(Number(carId)))
+      .then((resultsCar) => {
+        if (resultsCar.length !== 0) {
+          setConfigMessage({
+            backgroundColor: 'red',
+            severity: 'error',
+            message: 'Código de veículo já cadastrado',
+          });
+          setIsShowMessage(true);
+          return;
+        }
+        const newCar = {
+          idCar: carId,
+          model: carModel,
+          idDriver: carDriver,
+        };
+        invokeData('createAsset', queryPostCar(newCar))
+          .then((resultNewCar) => {
+            setConfigMessage({
+              backgroundColor: 'green',
+              severity: 'success',
+              message: 'Veículo incluído com sucesso!',
+            });
+            setIsShowMessage(true);
+            setCarId('');
+            setCarModel('');
+            setCarDriver('');
+            updateCarList();
+
+          }).catch((error) => {
+            console.error(error);
+            setConfigMessage({
+              backgroundColor: 'red',
+              severity: 'error',
+              message: 'Erro durante a inclusão do veículo.',
+            });
+            setIsShowMessage(true);
+          })
+      }).catch((error) => {
+        console.error(error);
+        setConfigMessage({
+          backgroundColor: 'red',
+          severity: 'error',
+          message: 'Erro durante a pesquisa dos veículos.',
+        });
+        setIsShowMessage(true);
+      });
+  };
+
   const updateCarList = () => {
     setUpdateData(true);
   }
