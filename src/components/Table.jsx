@@ -1,30 +1,37 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import RacesContext from '../context/RacesContext';
 import {
-  Box, Typography, Table, TableBody, TableHead, TableRow, styled,
-  IconButton, Stack,
+  Box, Table, TableBody, TableHead, TableRow, styled,
+  Stack, Button,
 } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import PropTypes from 'prop-types';
 
-function TableElement({
-  title,
-  header,
-  data,
-  handleClickEdit,
-  handleClickDelete,
-  isIconsDisabled,
-}) {
+function TableElement() {
+  const {
+    editCarRegister,
+    deleteCarRegister,
+    isIconsDisabled,
+    listCars,
+  } = useContext(RacesContext);
+
+  const header = [
+    'CÓDIGO',
+    'MODELO',
+    'MOTORISTA',
+    'TIME',
+    'AÇÕES',
+  ];
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: 'green',
       color: theme.palette.common.white,
-      fontSize: 14,
+      fontSize: 18,
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 6,
+      fontSize: 14,
     },
   }));
 
@@ -37,20 +44,24 @@ function TableElement({
     },
   }));
 
+  const handleClickEdit = (event) => {
+    const { id } = event.target;
+    if (id.length) {
+      editCarRegister(id);
+    }
+  };
+
+  const handleClickDelete = (event) => {
+    const { id } = event.target;
+    if (id.length) {
+      deleteCarRegister(id);
+    }
+  };
+
   return (
     <Box
       padding={ 2 }
     >
-      <Typography
-        color="green"
-        variant="h4"
-        component="div"
-        align="center"
-        padding={ 1 }
-        borderRadius={ 2 }
-      >
-        { title }
-      </Typography>
       <Table
         sx={ { minWidth: 700 } }
         aria-label="customized table"
@@ -71,14 +82,15 @@ function TableElement({
         </TableHead>
         <TableBody>
           {
-            data.map((elem, index) => {
+            listCars.map((elem, index) => {
+              const { id } = elem;
               const values = Object.values(elem);
               return (
                 <StyledTableRow key={ index }>
                   {
                     values.map((value, key) => 
                       <TableCell
-                        style={ { fontSize: '12px' } }
+                        style={ { fontSize: 16 } }
                         key={ key }
                         align="center"
                       >
@@ -91,26 +103,35 @@ function TableElement({
                   >
                     <Stack
                       direction="row"
+                      justifyContent={'center'}
                       spacing={ 1 }
                     >
-                      <IconButton
+                      <Button
                         color="warning"
                         aria-label="edit"
-                        name={ elem['$id'] }
+                        id={ id }
                         onClick={ (e) => handleClickEdit(e) }
                         disabled={ isIconsDisabled }
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
+                      > 
+                        Editar
+                        <EditIcon 
+                          id={ id }
+                          fontSize="small"
+                        />
+                      </Button>
+                      <Button
                         color="error"
                         aria-label="delete"
-                        name={ elem['$id'] }
+                        id={ id }
                         onClick={ (e) => handleClickDelete(e) }
                         disabled={ isIconsDisabled }
                       >
-                        <DeleteIcon />
-                      </IconButton>
+                        Excluir
+                        <DeleteIcon
+                          id={ id }
+                          fontSize="small"
+                        />
+                      </Button>
                     </Stack>
                   </TableCell>
                 </StyledTableRow>
@@ -121,15 +142,6 @@ function TableElement({
       </Table>
     </Box>
   );
-}
-
-TableElement.propTypes = {
-  title: PropTypes.string.isRequired,
-  header: PropTypes.arrayOf(PropTypes.string).isRequired,
-  data: PropTypes.arrayOf(PropTypes.any).isRequired,
-  handleClickEdit: PropTypes.func.isRequired,
-  handleClickDelete: PropTypes.func.isRequired,
-  isIconsDisabled: PropTypes.string.isRequired,
 }
 
 export default TableElement;
