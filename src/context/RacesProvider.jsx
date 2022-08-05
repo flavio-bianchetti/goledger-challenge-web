@@ -4,6 +4,17 @@ import { queryData, invokeData } from '../services/request';
 import PropTypes from 'prop-types';
 
 const RacesProvider = ({ children }) => {
+  const [listCars, setListCars] = useState([]);
+  const [updateData, setUpdateData] = useState(true);
+  const [carId, setCarId] = useState('');
+  const [carModel, setCarModel] = useState('');
+  const [carDriver, setCarDriver] = useState('');
+  const [listDrivers, setListDrivers] = useState([]);
+  const [isShowMessage, setIsShowMessage] = useState(false);
+  const [configMessage, setConfigMessage] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(false);
+  const [isEditCar, setIsEditCar] = useState(false);
+  const [isIconsDisabled, setIsIconsDisabled] = useState(false);
 
   const queryCar = () => ({
     "query": {
