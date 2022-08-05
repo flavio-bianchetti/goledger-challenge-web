@@ -1,4 +1,4 @@
-:rotating_light: Se você não está acostumado com _inglês_, pode encontrar a versão deste documento em _português_ _[aqui](#versão-em-português---GoLedger---Challenge)_.
+:rotating_light: Se você não está acostumado com _inglês_, pode encontrar a versão deste documento em _português_ _[aqui](#versão-em-português---goledger-challenge)_.
 
 # GoLedger Challenge
 
@@ -67,7 +67,12 @@ This repository contains the practical test "_GoLedger Challenge_", technical ch
 ---
 ### About delivery:
 - CRUD and styling of the cars page only.
-- So far, tests for the functionalities have not been prepared.
+- Tests were made that reached 34.29% of all files.
+
+### Known and unresolved issues:
+- When the application is started, the provider performs a data search in the database. During rendering not all information is displayed. The problem lies in the way the application searches the database.
+- The action buttons in the table do not run when pressed on top of the icon.
+- After deploying the application on Heroku, the database became inaccessible.
 
 ### Challenges and Learnings:
 - The biggest challenge was managing the time to complete the stages until this delivery.
@@ -80,6 +85,7 @@ This repository contains the practical test "_GoLedger Challenge_", technical ch
 ---
 
 by _[Flávio Bianchetti - 2022](https://github.com/flavio-bianchetti)_.
+
 ---
 ---
 # Versão em português - GoLedger Challenge
@@ -149,7 +155,12 @@ Este repositório contém o teste prático "_GoLedger Challenge_", desafio técn
 ---
 ### Sobre a entrega:
 - Foi desenvolvido o CRUD e a estilização apenas da página de carros.
-- Até o presente momento não foram elaborados testes para as funcionalidades.
+- Foram feitos testes que alcançaram 34.29% de todos os arquivos.
+
+### Problemas conhecidos e não resolvidos:
+- Quando a aplicação é iniciada, o provider executa uma busca dos dados no banco. Durante a renderização nem todas as informações são exibidas. O problema está na forma como a aplicação faz a busca no banco de dados.
+- Os botões de ações da tabela não executam quando pressionados em cima do ícone.
+- Após o deploy da aplicação no Heroku, o banco de dados tornou-se inacessível.
 
 ### Desafios e Aprendizados:
 - O maior desafio foi o gerenciamento do tempo para a conclusão das etapas até esta entrega.
