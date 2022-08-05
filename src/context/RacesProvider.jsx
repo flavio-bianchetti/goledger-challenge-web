@@ -148,7 +148,47 @@ const RacesProvider = ({ children }) => {
     }).then((resultDrivers) => setListDrivers(resultDrivers));
   }, []);
 
+  useEffect(() => {
+    if (carId.length === 0 || carModel.length === 0 || carDriver.length === 0) {
+      setIsBtnDisabled(true);
+    } else {
+      setIsBtnDisabled(false);
+    }
+  }, [carId, carModel, carDriver]);
+
+  useEffect(() => {
+    if (isShowMessage) {
+      let timer = setInterval(() => {
+        setIsShowMessage(false);
+      }, 3000);
+      return () => clearInterval(timer);
+    }
+  }, [isShowMessage]);
+
+  const updateCarList = () => {
+    setUpdateData(true);
+  }
   const listRacesProvider = {
+    listCars,
+    setListCars,
+    updateData,
+    setUpdateData,
+    carId,
+    setCarId,
+    carModel,
+    setCarModel,
+    carDriver,
+    setCarDriver,
+    listDrivers,
+    isShowMessage,
+    configMessage,
+    isBtnDisabled,
+    handleSubmitCar,
+    editCarRegister,
+    isEditCar,
+    handleChangeCar,
+    deleteCarRegister,
+    isIconsDisabled,
   };
 
   return (
