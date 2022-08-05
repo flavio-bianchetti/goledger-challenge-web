@@ -48,6 +48,7 @@ function AdressForm() {
         label="MOTORISTA"
         value={ carDriver }
         onClick={ (e) => handleClick(e) }
+        data-testid="select-driver"
       >
         {
           listDrivers.map(
@@ -104,6 +105,7 @@ function AdressForm() {
               value={ carId }
               onChange={ (e) => setCarId(e.target.value.replace(/[^0-9]/g, '')) }
               disabled={ isEditCar }
+              data-testid="input-id"
             />
           </Grid>
           <Grid
@@ -122,6 +124,7 @@ function AdressForm() {
               type="text"
               value={ carModel }
               onChange={ (e) => setCarModel(e.target.value) }
+              data-testid="input-model"
             />
           </Grid>
           <Grid
