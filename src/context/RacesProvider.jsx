@@ -91,6 +91,63 @@ const RacesProvider = ({ children }) => {
       }
     };
   }
+
+  useEffect(() => {
+    if (updateData) {
+      queryData('search', queryCar())
+      .then((resultsCar) => {
+        const dataCar = resultsCar.map((elem) => {
+          const result = {
+            'id': elem['id'],
+            'model': elem['model'],
+            'driver': '',
+            'team': ' - ',
+          };
+
+          if (elem.driver["@key"].split(':')[0] === 'car') {
+            result['driver'] = elem['model'];
+          } else {
+          queryData('search', queryDriver(
+            elem.driver['@assetType'],
+            elem.driver['@key']
+          ))
+            .then((resultsDriver) => {
+              result['driver'] = resultsDriver[0].name;
+              queryData('search', queryTeam(resultsDriver[0].team['@key']))
+                .then((resultsTeam) => {
+                  result['team'] = resultsTeam[0].name;
+                }).catch((error) => {
+                  console.error(error);
+                  result['team'] = 'Not found'; 
+                });
+            }).catch((error) => {
+              console.error(error);
+              result['driver'] = 'Not found';
+              result['team'] = 'Not found';
+            });
+          }
+          return result;
+
+        });
+        setListCars(dataCar);
+      }).catch((error) => {
+        console.error(error);
+        setListCars([]);
+      });
+      setUpdateData(false);
+    }
+  }, [updateData]);
+
+  useEffect(() => {
+    queryData('search', {
+      "query": {
+        "selector": {
+          "@assetType": "driver",
+        }
+      }
+    }).then((resultDrivers) => setListDrivers(resultDrivers));
+  }, []);
+
   const listRacesProvider = {
   };
 
