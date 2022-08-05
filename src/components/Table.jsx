@@ -73,6 +73,7 @@ function TableElement() {
                 <StyledTableCell
                   align="center"
                   key={ Math.random() }
+                  role="columnheader"
                 >
                   {head}
                 </StyledTableCell>
